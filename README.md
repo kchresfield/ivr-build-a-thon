@@ -22,17 +22,18 @@ Go to the [Dialogflow Console](https://dialogflow.cloud.google.com/cx/projects) 
 4. Click Create.
 
 ## Define Intents 
-Intents are used to understand user queries and respond accordingly. Under training phrases you will add common user statements so Dialogflow can match it to the intent.
+Intents are used to understand user queries and respond accordingly. In the Manage tab on the left had side, select Intents and create the intents listed below. Under training phrases you will add common user statements so Dialogflow can match it to the intent.
 
 - [ ] Create an intent for making a new order (e.g., order.new).
-- [ ] Create an intent for possible order items (e.g., order.new.item).
-- [ ] Create an intent for collecting user information (e.g., user.info).
-- [ ] Create an intent for processing payment (e.g., payment.new).
+// - [ ] Create an intent for collecting user information (e.g., user.info).
+// - [ ] Create an intent for processing payment (e.g., payment.new).
 - [ ] Create an intent for checking order status (e.g., order.track).
 
 ## Define Entities
 Define entities to capture specific data such as item type, order number, etc.
+- [ ] Create an entity for handeling yes or no responses.
 - [ ] Create an entity for possible order items (e.g., items).
+- [ ] Create an intent for possible order items with the newly created entity. (e.g., order.new.item). Make sure to include the order items in the training phrases.
 
 ## Define webhooks
 Define the webhooks to handle backend logic. This will be configured later.
@@ -41,10 +42,13 @@ Define the webhooks to handle backend logic. This will be configured later.
 ## Set up agent flow
 Under the Build tab, you will see a drag and drop GUI to build out the agent flow.
 - [ ] Click on `Start Page` and add a `Route`
-- [ ] Under the `Intent` section select the intent made for making a new order. Create another Intent under `Route` and select the intent made for checking order status. You should not see 2 new boxes under the `Start Page` box.
-- [ ] Select the intent for checking an order status. Inside `Entry Fulfillment` under `Agent says` add the response, "Ok, let's check on your order". Save your work.
-- [ ] Add a new paramater. Give a display name of `order-id` and add an entity type `@sys.number-sequence` and check the box that says `Required`.
-- [ ] Add a new route. Scroll down and find `Webhook settings`. In the drop down, select `+ Create webhook`. The link to a webhook will be provided during the demo. However if you're working on this outside of the build-a-thon, the endpoint will look similar to this:
+- [ ] On the left hand side, under `Pages`, create 3 new pages: "track", "new", and "confirm".
+- [ ] Under the `Intent` section select the intent made for making a new order. At the bottom of the page under `Transition`, seelct `Page` and select the page title "new".
+- [ ] Create another Intent under `Route` and select the intent made for checking order status.
+   > There should now be 2 boxes connected to `Start Page`, `new` and `track`.
+- [ ] Select the `track` box which will be used to track an order status. Click `Edit Fulfillment` and find `Agent says`. Add the response, "Ok, let's check on your order" and save your work.
+- [ ] Add a new paramater to the page. Give a display name of `order-id` and add an entity type `@sys.number-sequence` and check the box that says `Required`. Save your work.
+- [ ] Back on the track page, add a new route. Scroll down and find `Webhook settings`. Enable the webhook and in the drop down, select `+ Create webhook`. The link to a webhook will be provided during the demo. However if you're working on this outside of the build-a-thon, the endpoint will look similar to this:
 
 ```
 // fulfillment response creator
@@ -89,13 +93,16 @@ app.post('/check-order-confirmation', async (req, res) => {
 ```
 > After the webhook executes, the agent will respond with the generated response. NOTE: the `fulfillmentCreator` function is required.
 
+- [ ] Add a tag of "id" to the webhook.
 - [ ] After enabling and adding the webhook, scroll up to the `Condition` section and select the condition rule `Match AT LEAST ONE rule`. Under Parameter, add `$page.params.status` and under Value, add `"FINAL"`. This will automatically move the agent to the next transition.
   > OPTIONAL: You can add a transition page asking if there's anything other requests.
 
-- [ ] Select the box for making a new order. Under `Entry fulfillment` add the text, "Okay, let's start a new order". Add a new parameter. Under `Agent responses` add the text "What would you like to order?". Scroll up to the `Entity type` and seelct the entity created for handeling possible order items. Finally, check the `Required` box.
+- [ ] Select the box "new" which will be used for making a new order. Select `Edit Fulfillment` add the text, "Okay, let's start a new order" to the section `Agent says`.
+- [ ] Add a new parameter. Under `Agent responses` add the text "What would you like to order?". Scroll up to the `Entity type` and select the entity created for handeling possible order items. Give the display name the value "item" and finally, check the `Required` box. Save your work.
   > OPTIONAL: Under `Reprompt event handlers` for the event `No-match default`, add a agenet response that says, "Sorry I didn't get that. What item would you like to order".
 
-- [ ] Create a new route. Under `Agent says` add the text, "You have selected a $session.params.<item-parameter-name>", to confirm the order. Next create a new webhook to handle the order. The link to a webhook will be provided during the demo. However if you're working on this outside of the build-a-thon, the endpoint will look similar to this:
+- [ ] Create a new route. Under `Agent says` add the text, "You have selected a $session.params.<item-parameter-name>, one moment please while we gather the information about your order".
+- [ ] Next create a new webhook to handle the order. The link to a webhook will be provided during the demo. However if you're working on this outside of the build-a-thon, the endpoint will look similar to this:
 
  ```
 app.post('/make-order', async (req, res) => {
@@ -112,7 +119,7 @@ app.post('/make-order', async (req, res) => {
         let order = await queryData(sql);
         let confirmation = await queryData(sql2);
         
-        let txt = `Your order for a ${orderName} will arrive in ${shippingTime} days. Your confirmation number is ${confirmation.insertId}`
+        let txt = `Your order for a ${orderName} will be ${price} and arrive in ${shippingTime} days.`
         const jsonResp = fulfillmentCreator(txt, "order-id", confirmation.insertId, "price", price, "item", orderName); // utalizing the fulfillmentCreator function from the previous code sample
         res.send(jsonResp);
     } catch (err){
@@ -120,9 +127,17 @@ app.post('/make-order', async (req, res) => {
     }
 })
 ```
-Back in the Dialogflow console for the new order, add a new condition. Select the condition rule `Match AT LEAST ONE rule` and add the parameter `$page.params.status` with the value `"FINAL"`. This will conclude the flow.
-  > OPTIONAL: You can add a transition page asking if there's anything other requests.
+Add a tag of "order" to the webhook settings.
 
+- [ ] Back in the Dialogflow console for the `new` page's route, add a new condition. Select the condition rule `Match AT LEAST ONE rule` and add the parameter `$page.params.status` with the value `"FINAL"`. This will conclude the flow.
+  > OPTIONAL: You can add a transition page asking if there's anything other requests.
+- [ ] Scroll down to `Transition` and select the "confirm" page that was created earlier. Save your work.
+   > There should now be a "confirm" box attached to the "new" box.
+- [ ] Select the "confirm" box and edit the fulfillment. Under `Agent responses`, add the response, "Would you like to continue and place the order?". Save your work.
+- [ ] Create a new parameter, and select the entity type "yes-or-no" that was created earlier.
+- [ ] Next two routes will be created to handle the yes or no response from the customer.
+      - In the first route, under `Condition rules` select the option `Match AT LEAST ONE rule` and for the parameter, enter the value "$session.params.<parameter-name>" with a value of no. Under `Agent responses` add a value of "Not a problem! Transferring you back to the main menu", and under `Transition`, select `Start Page`.
+      - For the second route, under `Condition rules` select the option `Match AT LEAST ONE rule` and for the parameter, enter the value "$session.params.<parameter-name>" with a value of yes. Under `Agent responses` add a value of "Transferring you to payment", and under `Transition`, select `End Session`.
 
 ## Set Up Twilio Integration for Dialogflow
 If you haven't done so already, head over to the Integration section under the Manage tab. Under "One-click Telephony", connect Twilio. *You must be signed in the the Twilio console to complete this action*
