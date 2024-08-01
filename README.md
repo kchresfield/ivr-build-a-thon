@@ -1,7 +1,8 @@
 # ivr-build-a-thon
 ### Instructions for Twilio's IVR Buila-a-thon Session! This guide provides instructions for creating a Dialogflow agent that allows callers to order life insurance over the phone and take payments via Twilio's Stripe integration.
 
-## Prerequisits
+## Prerequisites
+
 
 Before you begin, ensure you have the following:
 
