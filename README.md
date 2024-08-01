@@ -1,59 +1,136 @@
 # ivr-build-a-thon
-Instructions for Twilio's IVR Buila-a-thon Session!
+### Instructions for Twilio's IVR Buila-a-thon Session! This guide provides instructions for creating a Dialogflow agent that allows callers to order life insurance over the phone and take payments via Twilio's Stripe integration.
 
+## Prerequisits
 
-Prerequisits
-Create a Google Cloud account []
-  Note: The $300 credit can only be assigned to newly created accounts. Feel free to use a personal email address to sign up if your company email address is assigned to a Google Cloud account in production. We will remind everyone at the end of the event about the free trial limitations to avoid any surprise bills. To learn more, please check out these Google Cloud docs.
-
-This guide provides instructions for creating a Dialogflow agent that allows callers to order life insurance over the phone and take payments via Twilio's Stripe integration.
-
-Prerequisites
 Before you begin, ensure you have the following:
 
-Google Account: To access Dialogflow.
-Twilio Account: For phone call integration.
-Stripe Account: For payment processing.
-Node.js and npm: To run the webhook server.
-Step 1: Create a Dialogflow Agent
-Sign in to Dialogflow: Go to Dialogflow Console and sign in with your Google account.
+- [ ] Google Account: To access Dialogflow.
+   >  Note: The $300 credit can only be assigned to newly created accounts. Feel free to use a personal email address to sign up if your company email address is assigned to a Google Cloud account in production. We will remind everyone at the end of the event about the free trial limitations to avoid any surprise bills. To learn more, please check out these Google Cloud docs.
 
-Create a New Agent:
+- [ ] Twilio Account: For phone call integration.
+- [ ] Stripe Account: For payment processing.
+- [ ] Node.js and npm: To run the webhook server if not using Twilio functions.
 
-Click on Create Agent.
-Enter an Agent Name (e.g., "Life Insurance Order Agent").
-Select your default language and time zone.
-Click Create.
-Define Intents: Intents are used to understand user queries and respond accordingly.
 
-Create an intent for collecting user information (e.g., CollectUserInfo).
-Create an intent for selecting insurance options (e.g., SelectInsurancePlan).
-Create an intent for confirming order details (e.g., ConfirmOrder).
-Create an intent for processing payment (e.g., ProcessPayment).
-Entities: Define entities to capture specific data.
+## Create a Dialogflow Agent
+Go to the [Dialogflow Console](https://dialogflow.cloud.google.com/cx/projects) and sign in with your Google account.
 
-Create entities for capturing data such as user name, insurance type, coverage amount, etc.
-Fulfillment: Enable webhook fulfillment to handle backend logic.
+1. Click on Create Agent.
+2. Enter an Agent Name (e.g., "Plant Order Agent").
+3. Select your default language and time zone.
+4. Click Create.
 
-Go to the Fulfillment section and enable the webhook.
-Enter your webhook URL (this will be configured later).
-Step 2: Set Up Twilio Integration
-Sign in to Twilio: Go to Twilio Console and sign in.
+## Define Intents 
+Intents are used to understand user queries and respond accordingly. Under training phrases you will add common user statements so Dialogflow can match it to the intent.
 
-Purchase a Phone Number:
+- [ ] Create an intent for making a new order (e.g., order.new).
+- [ ] Create an intent for possible order items (e.g., order.new.item).
+- [ ] Create an intent for collecting user information (e.g., user.info).
+- [ ] Create an intent for processing payment (e.g., payment.new).
+- [ ] Create an intent for checking order status (e.g., order.track).
 
-Go to Phone Numbers > Buy a Number.
-Choose a phone number and buy it.
-Set Up Twilio Function for Dialogflow Integration:
+## Define Entities
+Define entities to capture specific data such as item type, order number, etc.
+- [ ] Create an entity for possible order items (e.g., items).
 
-In Twilio Console, go to Functions > Create Function.
+## Define webhooks
+Define the webhooks to handle backend logic. This will be configured later.
 
-Use the Blank template.
 
-Name your function (e.g., DialogflowIntegration).
+## Set up agent flow
+Under the Build tab, you will see a drag and drop GUI to build out the agent flow.
+- [ ] Click on `Start Page` and add a `Route`
+- [ ] Under the `Intent` section select the intent made for making a new order. Create another Intent under `Route` and select the intent made for checking order status. You should not see 2 new boxes under the `Start Page` box.
+- [ ] Select the intent for checking an order status. Inside `Entry Fulfillment` under `Agent says` add the response, "Ok, let's check on your order". Save your work.
+- [ ] Add a new paramater. Give a display name of `order-id` and add an entity type `@sys.number-sequence` and check the box that says `Required`.
+- [ ] Add a new route. Scroll down and find `Webhook settings`. In the drop down, select `+ Create webhook`. The link to a webhook will be provided during the demo. However if you're working on this outside of the build-a-thon, the endpoint will look similar to this:
 
-Use the following code snippet to forward calls to Dialogflow:
+```
+// fulfillment response creator
+function fulfillmentCreator (txt, paramKey = null, paramVal = null){
+    let resp = {
+        "fulfillment_response": {
+            "messages": [
+                {
+                    "text": {
+                        "text": [txt]
+                    }
+                }
+            ]
+        },
+        "sessionInfo":{
+            "parameters": {
+                
+            }
+        }
+    }
+    return resp;
+}
 
+app.post('/check-order-confirmation', async (req, res) => {
+    let orderNumber = Number(req.body.sessionInfo.parameters["order-id"]); // Or the name given to the order parameter
+    let sql = `SELECT * FROM <database-table> WHERE id=${orderNumber}`;
+
+        try{
+            let order = await queryData(sql);
+            let txt = `Your order for a ${order[0].name} will arrive in ${order[0]['time']} days.` // Assuming the data entry contains the name and shipping speed of the item
+            const jsonResp = fulfillmentCreator(txt);
+            res.send(jsonResp);
+        } catch (err){
+            console.log(err)
+        }
+})
+```
+> After the webhook executes, the agent will respond with the generated response. NOTE: the `fulfillmentCreator` function is required.
+
+- [ ] After enabling and adding the webhook, scroll up to the `Condition` section and select the condition rule `Match AT LEAST ONE rule`. Under Parameter, add `$page.params.status` and under Value, add `"FINAL"`. This will automatically move the agent to the next transition.
+  > OPTIONAL: You can add a transition page asking if there's anything other requests.
+
+- [ ] Select the box for making a new order. Under `Entry fulfillment` add the text, "Okay, let's start a new order". Add a new parameter. Under `Agent responses` add the text "What would you like to order?". Scroll up to the `Entity type` and seelct the entity created for handeling possible order items. Finally, check the `Required` box.
+  > OPTIONAL: Under `Reprompt event handlers` for the event `No-match default`, add a agenet response that says, "Sorry I didn't get that. What item would you like to order".
+
+- [ ] Create a new route. Under `Agent says` add the text, "You have selected a $session.params.<item-parameter-name>", to confirm the order. Next create a new webhook to handle the order. The link to a webhook will be provided during the demo. However if you're working on this outside of the build-a-thon, the endpoint will look similar to this:
+
+ ```
+app.post('/make-order', async (req, res) => {
+
+    let orderName = `"${req.body.sessionInfo.parameters.item}"`; // Or the name given to the item parameter
+    let shippingTime = Math.floor(Math.random() * 365);
+    let phoneNumber = req.body.sessionInfo.parameters.caller.slice(2) || process.env.PHONE_NUMBER; // the phone number is a parameter sent from Twilio
+    let price = Math.floor(Math.random() * 50);
+
+    const sql = `UPDATE <database-table>.stock SET stock = stock - 1 WHERE name = ${orderName} AND stock > 0`;
+    const sql2 = `INSERT INTO <database-table>.orders (name, price, time, customer) VALUES (${orderName}, ${price}, ${shippingTime}, ${phoneNumber})`
+    
+    try{
+        let order = await queryData(sql);
+        let confirmation = await queryData(sql2);
+        
+        let txt = `Your order for a ${orderName} will arrive in ${shippingTime} days. Your confirmation number is ${confirmation.insertId}`
+        const jsonResp = fulfillmentCreator(txt, "order-id", confirmation.insertId); // utalizing the fulfillmentCreator function from the previous code sample
+        res.send(jsonResp);
+    } catch (err){
+        console.log(err)
+    }
+})
+```
+Back in the Dialogflow console for the new order, add a new condition. Select the condition rule `Match AT LEAST ONE rule` and add the parameter `$page.params.status` with the value `"FINAL"`. This will conclude the flow.
+  > OPTIONAL: You can add a transition page asking if there's anything other requests.
+
+
+## Set Up Twilio Integration for Dialogflow
+If you haven't done so already, head over to the Integration section under the Manage tab. Under "One-click Telephony", connect Twilio. *You must be signed in the the Twilio console to complete this action*
+
+Once there, add a friendly-name for your new flow. Once completed, a new Studio flow will be created for the agent.
+
+Head over to the newly created Studio flow and complete the following steps:
+
+- [ ] Under the `Incoming Call` flow, add a `Say/Play` widget and add the text "Hello, this call will be recorded for quality assurance".
+- [ ] Connect the Say/Play widget to a `Call Recording` widget and turn on call recording.
+- [ ] Connect the recording widget to the `Connect Virtual Agent` widget. Under the parameter section, add an additional parameter called `caller` with the value `{{trigger.call.From}}`. This will allow Dialogflow to have access to the user's caller ID.
+
+------------- UNFINISHED CODE FOR USERS WHO DON'T WANT TO USE TWILIO FUNCTIONS ----------------
 javascript
 Copy code
 exports.handler = function(context, event, callback) {
