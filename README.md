@@ -25,8 +25,6 @@ Go to the [Dialogflow Console](https://dialogflow.cloud.google.com/cx/projects) 
 Intents are used to understand user queries and respond accordingly. In the Manage tab on the left had side, select Intents and create the intents listed below. Under training phrases you will add common user statements so Dialogflow can match it to the intent.
 
 - [ ] Create an intent for making a new order (e.g., order.new).
-// - [ ] Create an intent for collecting user information (e.g., user.info).
-// - [ ] Create an intent for processing payment (e.g., payment.new).
 - [ ] Create an intent for checking order status (e.g., order.track).
 
 ## Define Entities
@@ -41,8 +39,9 @@ Define the webhooks to handle backend logic. This will be configured later.
 
 ## Set up agent flow
 Under the Build tab, you will see a drag and drop GUI to build out the agent flow.
-- [ ] Click on `Start Page` and add a `Route`
+
 - [ ] On the left hand side, under `Pages`, create 3 new pages: "track", "new", and "confirm".
+- [ ] Click on `Start Page` and add a `Route`
 - [ ] Under the `Intent` section select the intent made for making a new order. At the bottom of the page under `Transition`, seelct `Page` and select the page title "new".
 - [ ] Create another Intent under `Route` and select the intent made for checking order status.
    > There should now be 2 boxes connected to `Start Page`, `new` and `track`.
