@@ -119,7 +119,7 @@ app.post('/make-order', async (req, res) => {
         let confirmation = await queryData(sql2);
         
         let txt = `Your order for a ${orderName} will be ${price} and arrive in ${shippingTime} days.`
-        const jsonResp = fulfillmentCreator(txt, "order-id", confirmation.insertId, "price", price, "item", orderName); // utalizing the fulfillmentCreator function from the previous code sample
+        const jsonResp = fulfillmentCreator(txt, "order-id", confirmation.insertId, "price", price); // utalizing the fulfillmentCreator function from the previous code sample
         res.send(jsonResp);
     } catch (err){
         console.log(err)
