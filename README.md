@@ -130,6 +130,52 @@ Head over to the newly created Studio flow and complete the following steps:
 - [ ] Connect the Say/Play widget to a `Call Recording` widget and turn on call recording.
 - [ ] Connect the recording widget to the `Connect Virtual Agent` widget. Under the parameter section, add an additional parameter called `caller` with the value `{{trigger.call.From}}`. This will allow Dialogflow to have access to the user's caller ID.
 
+
+## Set Up Stripe Integration
+If you haven't done so already, [create a Stripe account](https://dashboard.stripe.com/register).
+
+- [ ] Integrate the Stripe Pay Connector in the Twilio console. Under Voice > Manage > Pay Connectors, select Stripe Connector. Install and look over the terms and conditions and confirm if you agree with the t&c.
+- [ ] Create a Twilio function to handle the payment results. Head to Functions and Assets > Services and create a new service with the name `process-payment`. Add a new endpoint named `process`. Next to the endpoint name, open the visibility to the public then add this code to your function:
+```
+exports.handler = function(context, event, callback) {
+    console.log("in Pay");
+    console.log(event);
+    console.log(event.Result);
+
+    let twiml = new Twilio.twiml.VoiceResponse();
+
+    switch (event.Result) {
+    case "success":
+        text = "Thank you for your payment";
+        break;
+    case "payment-connector-error":
+        text = "The Payment Gateway is reporting an error";
+        console.log(decodeURIComponent(event.PaymentError));
+        break;
+
+    default: 
+        text = "The payment was not completed successfully";
+}
+    twiml.say(text);
+    callback(null, twiml);
+};
+```
+then save and deploy the function.
+
+- [ ] Create a new [TwiML Bin](https://www.twilio.com/console/runtime/twiml-bins) to handle the payment. The caller will hear prompts to enter their payment information. Add the following code and add the link from the twilio function that was just created to the `action` attribute:
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say>Calling Twilio Pay</Say>
+  <Pay paymentConnector="Default" action=<link-to-twilio-payment-function> chargeAmount="{{Body}}"/>
+</Response>
+```
+to learn more about the Pay verb and optional attributes, check out the Twilio documentation [here](https://www.twilio.com/docs/voice/twiml/pay).
+
+
+
+
+
 ------------- UNFINISHED CODE FOR USERS WHO DON'T WANT TO USE TWILIO FUNCTIONS ----------------
 javascript
 Copy code
