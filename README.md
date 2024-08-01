@@ -48,7 +48,7 @@ Under the Build tab, you will see a drag and drop GUI to build out the agent flo
 
 ```
 // fulfillment response creator
-function fulfillmentCreator (txt, paramKey = null, paramVal = null){
+function fulfillmentCreator (txt, ...args){
     let resp = {
         "fulfillment_response": {
             "messages": [
@@ -65,6 +65,11 @@ function fulfillmentCreator (txt, paramKey = null, paramVal = null){
             }
         }
     }
+   if (args) {
+    for (let i = 0; i < args.length; i += 2) {
+      a.sessionInfo.parameters[args[i]] = args[i + 1];
+    }
+  }
     return resp;
 }
 
@@ -108,7 +113,7 @@ app.post('/make-order', async (req, res) => {
         let confirmation = await queryData(sql2);
         
         let txt = `Your order for a ${orderName} will arrive in ${shippingTime} days. Your confirmation number is ${confirmation.insertId}`
-        const jsonResp = fulfillmentCreator(txt, "order-id", confirmation.insertId); // utalizing the fulfillmentCreator function from the previous code sample
+        const jsonResp = fulfillmentCreator(txt, "order-id", confirmation.insertId, "price", price, "item", orderName); // utalizing the fulfillmentCreator function from the previous code sample
         res.send(jsonResp);
     } catch (err){
         console.log(err)
@@ -129,9 +134,13 @@ Head over to the newly created Studio flow and complete the following steps:
 - [ ] Under the `Incoming Call` flow, add a `Say/Play` widget and add the text "Hello, this call will be recorded for quality assurance".
 - [ ] Connect the Say/Play widget to a `Call Recording` widget and turn on call recording.
 - [ ] Connect the recording widget to the `Connect Virtual Agent` widget. Under the parameter section, add an additional parameter called `caller` with the value `{{trigger.call.From}}`. This will allow Dialogflow to have access to the user's caller ID.
+- [ ] Under the Flow Control section, add a `Set Variable` widget to capture the price of the item that was purchased. Under the key, set a value of "price" and a value of `{{widgets.<virtual-agent-widget-name>.VirtualAgentProviderData.sessionInfo.parameters.price}} || null`.
+- [ ] Add another variable with a key name of "item", and tha value of `{{widgets.<virtual-agent-widget-name>.VirtualAgentProviderData.sessionInfo.parameters.item}}`.
+- [ ] Add a `Split Based On` widget and check if there is a value for the price variable that was defined.
+- [ ] Connect the split widget to a `Capture Payments` widget and enter the optional Stripe pay connector information. This will be built in the next section.
 
 
-## Set Up Stripe Integration
+## Set Up Stripe Integration (Optional)
 If you haven't done so already, [create a Stripe account](https://dashboard.stripe.com/register).
 
 - [ ] Integrate the Stripe Pay Connector in the Twilio console. Under Voice > Manage > Pay Connectors, select Stripe Connector. Install and look over the terms and conditions and confirm if you agree with the t&c.
@@ -173,7 +182,15 @@ then save and deploy the function.
 to learn more about the Pay verb and optional attributes, check out the Twilio documentation [here](https://www.twilio.com/docs/voice/twiml/pay).
 
 
+- [ ] Head back to the Studio Flow and enter the information from the newly created Stripe Connector.
+   - Select the acceptable card types
+   - Configure the postal and security code options
+   - Add the **unique name** of the payment gateway connector that was created
+   - For the carge amount, add the value {{flow.variables.price}}
+   - Select the currency to charge the payments
 
+- [ ] Connect the Success flow to a `Say/Play` widget that says, "Thank you for your payment of {{flow.variables.price}} for your {{flow.variables.item}} have a great day!"
+- [ ] Connect the error messages to a `Gather Input on Call` widget that says, "Sorry, there was an error processing your order, would you like me to connect you to an agent?", and add any logic thereafter.
 
 
 ------------- UNFINISHED CODE FOR USERS WHO DON'T WANT TO USE TWILIO FUNCTIONS ----------------
