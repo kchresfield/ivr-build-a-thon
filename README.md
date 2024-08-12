@@ -8,7 +8,7 @@ Before you begin, ensure you have the following:
 
 - [ ] Google Account: To access Dialogflow.
    >  Note: The $300 credit can only be assigned to newly created accounts. Feel free to use a personal email address to sign up if your company email address is assigned to a Google Cloud account in production. We will remind everyone at the end of the event about the free trial limitations to avoid any surprise bills. To learn more, please check out these Google Cloud docs.
-
+- [ ] [Set up Twilio's Dialogflow connector.](https://www.twilio.com/docs/voice/virtual-agent/dialogflow-cx-onboarding)
 - [ ] Twilio Account: For phone call integration.
 - [ ] Stripe Account: For payment processing.
 - [ ] Node.js and npm: To run the webhook server if not using Twilio functions.
@@ -154,8 +154,16 @@ Head over to the newly created Studio flow and complete the following steps:
 - [ ] Add a `Split Based On` widget and check if there is a value for the price variable that was defined.
 - [ ] Connect the split widget to a `Capture Payments` widget and enter the optional Stripe pay connector information. This will be built in the next section.
 
+## Set up Voice Intelligence (Optional)
+Voice Intelligence is one of Twilio's newest features that transcribes voice calls and highlights actions and words mentioned in a call using AI. Voice Intelligence can also summerize and measure call satisfaction.
 
-## Set Up Stripe Integration (Optional)
+In the Twilio console, head over to the Voice Intelligence section and create a new service.
+- [ ] Create and name a new service and select the settings necessary for your use case. For now, do not select PII redaction.
+- [ ] In the newly created service, create 2 new operators. One called plants and one called competitors.
+
+--------------------- FINISH THIS --------------------
+
+## Set up Stripe Integration (Optional)
 If you haven't done so already, [create a Stripe account](https://dashboard.stripe.com/register).
 
 - [ ] Integrate the Stripe Pay Connector in the Twilio console. Under Voice > Manage > Pay Connectors, select Stripe Connector. Install and look over the terms and conditions and confirm if you agree with the t&c.
