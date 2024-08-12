@@ -101,7 +101,7 @@ app.post('/check-order-confirmation', async (req, res) => {
 - [ ] Add a new parameter. Under `Agent responses` add the text "What would you like to order?". Scroll up to the `Entity type` and select the entity created for handeling possible order items. Give the display name the value "item" and finally, check the `Required` box. Save your work.
   > OPTIONAL: Under `Reprompt event handlers` for the event `No-match default`, add a agenet response that says, "Sorry I didn't get that. What item would you like to order".
 
-- [ ] Create a new route. Under `Agent says` add the text, "You have selected a $session.params.<item-parameter-name>, one moment please while we gather the information about your order".
+- [ ] Create a new route. Under `Agent says` add the text, "You have selected a $session.params.*item-parameter-name*, one moment please while we gather the information about your order".
 - [ ] Next create a new webhook to handle the order. The link to a webhook will be provided during the demo. However if you're working on this outside of the build-a-thon, the endpoint will look similar to this:
 
  ```
