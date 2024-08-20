@@ -11,8 +11,7 @@ Before you begin, ensure you have the following:
 - [ ] Create a Dialogflow Agent (see below)
 - [ ] [Set up Twilio's Dialogflow connector.](https://www.twilio.com/docs/voice/virtual-agent/dialogflow-cx-onboarding)
 - [ ] Twilio Account: For phone call integration.
-- [ ] Stripe Account: For payment processing.
-- [ ] Node.js and npm: To run the webhook server if not using Twilio functions.
+- [ ] (Optional) Stripe Account: For payment processing.
 
 
 ### Create a Dialogflow Agent
