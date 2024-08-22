@@ -18,7 +18,7 @@ Before you begin, ensure you have the following:
 Go to the [Dialogflow Console](https://dialogflow.cloud.google.com/cx/projects) and sign in with your Google account.
 
 1. Click on Create Agent.
-2. Enter an Agent Name (e.g., "Plant Order Agent").
+2. Enter an Agent Name (e.g., "Plant Bot").
 3. Select your default language and time zone.
 4. Click Create.
 
@@ -33,9 +33,6 @@ Define entities to capture specific data such as item type, order number, etc.
 - [ ] Create an entity for handeling yes or no responses.
 - [ ] Create an entity for possible order items (e.g., items).
 - [ ] Create an intent for possible order items with the newly created entity. (e.g., order.new.item). Make sure to include the order items in the training phrases.
-
-## Define webhooks
-Define the webhooks to handle backend logic. This will be configured later.
 
 
 ## Set up agent flow
