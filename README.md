@@ -51,45 +51,62 @@ Under the Build tab, you will see a drag and drop GUI to build out the agent flo
 - [ ] Back on the track page, add a new route. Scroll down and find `Webhook settings`. Enable the webhook and in the drop down, select `+ Create webhook`. The link to a webhook will be provided during the demo. However if you're working on this outside of the build-a-thon, the endpoint will look similar to this:
 
 ```
-// fulfillment response creator
-function fulfillmentCreator (txt, ...args){
-    let resp = {
-        "fulfillment_response": {
-            "messages": [
-                {
-                    "text": {
-                        "text": [txt]
+exports.handler = async function(context, event, callback) {
+  // fulfillment response creator
+    function fulfillmentCreator (txt, ...args){
+        let a = {
+            "fulfillment_response": {
+             "messages": [
+                    {
+                        "text": {
+                            "text": [txt]
+                        }
                     }
+                ]
+            },
+            "sessionInfo":{
+                "parameters": {
+                    
                 }
-            ]
-        },
-        "sessionInfo":{
-            "parameters": {
-                
             }
         }
+        if (args) {
+            for (let i = 0; i < args.length; i += 2) {
+                a.sessionInfo.parameters[args[i]] = args[i + 1];
+            }
+        }
+        return a;
     }
-   if (args) {
-    for (let i = 0; i < args.length; i += 2) {
-      a.sessionInfo.parameters[args[i]] = args[i + 1];
-    }
-  }
-    return resp;
-}
 
-app.post('/check-order-confirmation', async (req, res) => {
-    let orderNumber = Number(req.body.sessionInfo.parameters["order-id"]); // Or the name given to the order parameter
-    let sql = `SELECT * FROM <database-table> WHERE id=${orderNumber}`;
+    const config = {
+        host: context.host,
+        port: context.port,
+        user: context.user,
+        database: context.databaseName,
+    };
 
+    const orderNumber = Number(event.sessionInfo.parameters["order-number"]);
         try{
-            let order = await queryData(sql);
-            let txt = `Your order for a ${order[0].name} will arrive in ${order[0]['time']} days.` // Assuming the data entry contains the name and shipping speed of the item
+            // connect
+            const db = await mysql.createConnection(config);
+
+            // Perform the query
+            const [rows] = await db.execute(`SELECT * FROM orders WHERE id="${orderNumber}"`);
+            await db.end(); // Close the connection
+            console.log(rows);
+            let order = rows[0]
+            const name = order.name;
+            const time = order.time;
+
+            let txt = `Your order for a ${name} will arrive in ${time} days.`
             const jsonResp = fulfillmentCreator(txt);
-            res.send(jsonResp);
+            return callback(null, jsonResp);
         } catch (err){
             console.log(err)
+            return callback(null, err);
         }
-})
+
+};
 ```
 > After the webhook executes, the agent will respond with the generated response. NOTE: the `fulfillmentCreator` function is required.
 
@@ -105,27 +122,64 @@ app.post('/check-order-confirmation', async (req, res) => {
 - [ ] Next create a new webhook to handle the order. The link to a webhook will be provided during the demo. However if you're working on this outside of the build-a-thon, the endpoint will look similar to this:
 
  ```
-app.post('/make-order', async (req, res) => {
+exports.handler = async function(context, event, callback) {
 
-    let orderName = `"${req.body.sessionInfo.parameters.item}"`; // Or the name given to the item parameter
+  function fulfillmentCreator (txt, ...args){
+    let a = {
+        "fulfillment_response": {
+            "messages": [
+                {
+                    "text": {
+                        "text": [txt]
+                    }
+                }
+            ]
+        },
+        "sessionInfo":{
+            "parameters": {
+                
+            }
+        }
+    }
+    if (args) {
+        for (let i = 0; i < args.length; i += 2) {
+          a.sessionInfo.parameters[args[i]] = args[i + 1];
+        }
+      }
+    return a;
+}
+
+    const config = {
+        host: context.host,
+        port: context.port,
+        user: context.user,
+        database: context.databaseName,
+    };
+  
+
+    let orderName = `"${event.sessionInfo.parameters.item}"`;
     let shippingTime = Math.floor(Math.random() * 365);
-    let phoneNumber = req.body.sessionInfo.parameters.caller.slice(2) || process.env.PHONE_NUMBER; // the phone number is a parameter sent from Twilio
-    let price = Math.floor(Math.random() * 50);
+    let price = 5;
 
-    const sql = `UPDATE <database-table>.stock SET stock = stock - 1 WHERE name = ${orderName} AND stock > 0`;
-    const sql2 = `INSERT INTO <database-table>.orders (name, price, time, customer) VALUES (${orderName}, ${price}, ${shippingTime}, ${phoneNumber})`
+    const sql2 = `INSERT INTO orders (name, price, time) VALUES (${orderName}, ${price}, ${shippingTime})` //, customer ${phoneNumber}
     
     try{
-        let order = await queryData(sql);
-        let confirmation = await queryData(sql2);
-        
-        let txt = `Your order for a ${orderName} will be ${price} and arrive in ${shippingTime} days.`
-        const jsonResp = fulfillmentCreator(txt, "order-id", confirmation.insertId, "price", price); // utalizing the fulfillmentCreator function from the previous code sample
-        res.send(jsonResp);
+        const db = await mysql.createConnection(config);
+
+        const [confirmation] = await db.execute(sql2);
+        await db.end(); // Close the connection
+        console.log(confirmation);
+      
+        let txt = `Your order for a ${orderName} will arrive in ${shippingTime} days. Your confirmation number is ${confirmation.insertId}.`
+        const jsonResp = fulfillmentCreator(txt, "order-id", confirmation.insertId, price);
+
+        return callback(null, jsonResp);
     } catch (err){
         console.log(err)
-    }
-})
+        return callback(null, err);
+    } 
+
+}
 ```
 Add a tag of "order" to the webhook settings.
 
