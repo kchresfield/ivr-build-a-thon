@@ -1,0 +1,922 @@
+{
+  "flow": {
+    "flow": {
+      "flowId": "00000000-0000-0000-0000-000000000000",
+      "displayName": "Plant-Bot Flow",
+      "transitionEvents": [ {
+        "triggerIntentId": "00000000-0000-0000-0000-000000000000",
+        "transitionEventHandler": {
+          "beforeTransition": {
+            "staticUserResponse": {
+              "candidates": [ {
+                "selector": {
+                  "platform": [ "PLATFORM_UNSPECIFIED" ],
+                  "lang": "en"
+                },
+                "responses": [ {
+                  "text": {
+                    "variants": [ {
+                      "text": "Thanks for calling Kaelyn's Plant Shop, located in her house. What can I do for you today? You can say things like \"order a plant\" or \"find my order\"."
+                    } ]
+                  }
+                } ]
+              } ]
+            },
+            "nextActionOverride": {
+            
+            }
+          }
+        },
+        "name": "393b6dbc-ae30-4cec-9437-a10ca1cb22cd"
+      }, {
+        "triggerIntentId": "4763c34e-c884-48e8-9867-7b81b647e5b9",
+        "transitionEventHandler": {
+          "beforeTransition": {
+          
+          },
+          "targetPageId": "8282823e-9d09-45fb-a300-8ddfdd8f00d5"
+        },
+        "name": "656b5807-91dd-40eb-8754-7203aa81c382"
+      }, {
+        "triggerIntentId": "70adb7e8-6ecd-471d-9da8-95a277fd6bc7",
+        "transitionEventHandler": {
+          "beforeTransition": {
+          
+          },
+          "targetPageId": "9a08476a-976b-4976-8f44-b2fbc86eb521"
+        },
+        "name": "d9b483ac-0e87-4a7a-ae1b-2e40a34d28f9"
+      } ],
+      "modelIdentifier": {
+        "modelId": "31b1787c-5176-4781-83e9-463e0a3b6533"
+      },
+      "conversationEvents": [ {
+        "event": "sys.no-match-default",
+        "handler": {
+          "beforeTransition": {
+            "staticUserResponse": {
+              "candidates": [ {
+                "selector": {
+                  "platform": [ "PLATFORM_UNSPECIFIED" ],
+                  "lang": "en"
+                },
+                "responses": [ {
+                  "text": {
+                    "variants": [ {
+                      "text": "I didn't get that. Can you say it again?"
+                    }, {
+                      "text": "I missed what you said. What was that?"
+                    }, {
+                      "text": "Sorry, could you say that again?"
+                    }, {
+                      "text": "Sorry, can you say that again?"
+                    }, {
+                      "text": "Can you say that again?"
+                    }, {
+                      "text": "Sorry, I didn't get that. Can you rephrase?"
+                    }, {
+                      "text": "Sorry, what was that?"
+                    }, {
+                      "text": "One more time?"
+                    }, {
+                      "text": "What was that?"
+                    }, {
+                      "text": "Say that one more time?"
+                    }, {
+                      "text": "I didn't get that. Can you repeat?"
+                    }, {
+                      "text": "I missed that, say that again?"
+                    } ]
+                  }
+                } ]
+              } ]
+            }
+          }
+        },
+        "name": "7b4a292b-82de-44fa-b5ee-285bc58927a3"
+      }, {
+        "event": "sys.no-input-default",
+        "handler": {
+          "beforeTransition": {
+            "staticUserResponse": {
+              "candidates": [ {
+                "selector": {
+                  "platform": [ "PLATFORM_UNSPECIFIED" ],
+                  "lang": "en"
+                },
+                "responses": [ {
+                  "text": {
+                    "variants": [ {
+                      "text": "I didn't get that. Can you say it again?"
+                    }, {
+                      "text": "I missed what you said. What was that?"
+                    }, {
+                      "text": "Sorry, could you say that again?"
+                    }, {
+                      "text": "Sorry, can you say that again?"
+                    }, {
+                      "text": "Can you say that again?"
+                    }, {
+                      "text": "Sorry, I didn't get that. Can you rephrase?"
+                    }, {
+                      "text": "Sorry, what was that?"
+                    }, {
+                      "text": "One more time?"
+                    }, {
+                      "text": "What was that?"
+                    }, {
+                      "text": "Say that one more time?"
+                    }, {
+                      "text": "I didn't get that. Can you repeat?"
+                    }, {
+                      "text": "I missed that, say that again?"
+                    } ]
+                  }
+                } ]
+              } ]
+            }
+          }
+        },
+        "name": "b15f4971-b800-494e-a9f8-37d6325cd296"
+      } ],
+      "nluSettings": {
+        "classificationThreshold": 0.30000001,
+        "modelType": "MODEL_TYPE_ADVANCED",
+        "modelTrainingMode": "MODEL_TRAINING_MODE_AUTOMATIC",
+        "customConfigKey": "502dba7e-d03b-4230-8ee0-cb00758b4674",
+        "multiIntentSettings": {
+        
+        }
+      },
+      "ivrSettings": {
+        "enableIvr": true
+      },
+      "etag": "67451313",
+      "nluSettingsMapping": [ {
+        "key": "en",
+        "value": {
+          "classificationThreshold": 0.30000001,
+          "modelType": "MODEL_TYPE_ADVANCED",
+          "modelTrainingMode": "MODEL_TRAINING_MODE_AUTOMATIC",
+          "customConfigKey": "502dba7e-d03b-4230-8ee0-cb00758b4674",
+          "multiIntentSettings": {
+          
+          },
+          "languageCode": "en"
+        }
+      } ]
+    },
+    "intents": [ {
+      "meta": {
+        "id": "4763c34e-c884-48e8-9867-7b81b647e5b9",
+        "displayName": "order.new",
+        "priority": 500000,
+        "parameters": [ {
+          "id": "item",
+          "displayName": "item",
+          "value": "$item",
+          "entityTypeDisplayName": "@item"
+        } ],
+        "etag": "66c64b85"
+      },
+      "trainingPhrases": [ {
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "Gimme more "
+        }, {
+          "text": "roses",
+          "entityType": "@item",
+          "alias": "item"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "I'd like to buy a "
+        }, {
+          "text": "fiddle leaf",
+          "entityType": "@item",
+          "alias": "item"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "Gimme more plants"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "Make a new order"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "Order a plant"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "Place a new order"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      } ]
+    }, {
+      "meta": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "displayName": "Default Welcome Intent",
+        "priority": 500000
+      },
+      "trainingPhrases": [ {
+        "id": "0abffde4-6699-429e-bbab-5d69c34a1d26",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "just going to say hi"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "6690e92b-c67d-4c79-9488-45288cc30467",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "heya"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "187dcd03-659c-473a-9d54-99d4cde23421",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "hello hi"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "e5223997-99f3-41b1-9512-d610b749d963",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "howdy"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "95f49275-cce9-4cfe-ab05-e8c706b988a9",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "hey there"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "f1540100-5a68-4b32-b32c-248919fd76f7",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "hi there"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "37696de7-0487-4f1d-9230-f7fd5b99c644",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "greetings"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "b687f81b-5b0b-4127-b3c4-b413d5e3f65c",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "hey"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "fb99ddbf-c2ea-4f92-91d3-6109ac65df90",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "long time no see"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "2ba8d09e-da07-4c5a-85c3-f7f6716cdf63",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "hello"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "b9750318-4f34-4627-949f-4c8fe53328e4",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "lovely day isn't it"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "01f82f9b-3442-4733-8074-e7d96555471e",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "I greet you"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "57bdd902-f3b0-4ec1-b1e8-2a1057a872f2",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "hello again"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "4cd17517-4390-48cc-ba57-b931038e4bde",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "hi"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "a39c4960-69bb-4dd8-8d1b-3fe10a7150a0",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "hello there"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "eb6f489f-1fe2-409a-ac07-8dbc12e96a6f",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "hi there"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "id": "1104f29e-2cd1-4a6b-bd50-bbdd4bd70cc4",
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "a good day"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      } ]
+    }, {
+      "meta": {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "displayName": "Default Negative Intent",
+        "priority": 500000,
+        "isFallback": true
+      }
+    }, {
+      "meta": {
+        "id": "70adb7e8-6ecd-471d-9da8-95a277fd6bc7",
+        "displayName": "order.track",
+        "priority": 500000,
+        "parameters": [ {
+          "id": "item",
+          "displayName": "item",
+          "value": "$item",
+          "entityTypeDisplayName": "@item"
+        } ],
+        "etag": "66c64bdc"
+      },
+      "trainingPhrases": [ {
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "Where is my "
+        }, {
+          "text": "rose",
+          "entityType": "@item",
+          "alias": "item"
+        }, {
+          "text": " order?"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "What is my expected delivery date?"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "I want to find my plant"
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      }, {
+        "type": "EXAMPLE",
+        "parts": [ {
+          "text": "I'd like to track my last order."
+        } ],
+        "timesAddedCount": 1,
+        "lang": "en"
+      } ]
+    } ],
+    "entities": [ {
+      "id": "15d7db9c-af1d-4525-9947-c36f73d99038",
+      "displayName": "item",
+      "kind": "KIND_MAP",
+      "entries": [ {
+        "value": "pothos",
+        "synonyms": [ "marbled pothos", "pothos", "queen pothos" ],
+        "lang": "en"
+      }, {
+        "value": "fiddle leaf fig",
+        "synonyms": [ "fiddle", "fiddle leaf", "fiddle leaf fig", "fig" ],
+        "lang": "en"
+      }, {
+        "value": "snake plant",
+        "synonyms": [ "hiss plant", "snake plant" ],
+        "lang": "en"
+      }, {
+        "value": "monkey plant",
+        "synonyms": [ "monkey plant" ],
+        "lang": "en"
+      }, {
+        "value": "rose",
+        "synonyms": [ "rose", "roses" ],
+        "lang": "en"
+      } ],
+      "nluSettings": {
+      
+      }
+    }, {
+      "id": "c879e12b-f71d-4fa8-9873-86de65781d30",
+      "displayName": "yes-or-no",
+      "kind": "KIND_MAP",
+      "entries": [ {
+        "value": "yes",
+        "synonyms": [ "continue", "yeah", "yep", "yes", "yessiireee" ],
+        "lang": "en"
+      }, {
+        "value": "no",
+        "synonyms": [ "no", "nope", "not that ", "wrong", "nah dog" ],
+        "lang": "en"
+      } ],
+      "nluSettings": {
+      
+      }
+    } ],
+    "pages": [ {
+      "key": "1ddec8ae-5b3b-45c5-9a06-75abd078e729",
+      "value": {
+        "displayName": "transfer to payment",
+        "onLoad": {
+          "staticUserResponse": {
+            "candidates": [ {
+              "selector": {
+                "platform": [ "PLATFORM_UNSPECIFIED" ],
+                "lang": "en"
+              },
+              "responses": [ {
+                "text": {
+                  "variants": [ {
+                    "text": "one moment while we transfer you to stripe for payment"
+                  } ]
+                }
+              } ]
+            } ]
+          },
+          "nextActionOverride": {
+          
+          }
+        },
+        "transitionEvents": [ {
+          "condition": {
+            "restriction": {
+              "comparator": "EQUALS",
+              "lhs": {
+                "member": {
+                  "expressions": [ {
+                    "value": "$session"
+                  }, {
+                    "value": "params"
+                  }, {
+                    "value": "status"
+                  } ]
+                }
+              },
+              "rhs": {
+                "phrase": {
+                  "values": [ "FINAL" ]
+                }
+              }
+            }
+          },
+          "transitionEventHandler": {
+            "beforeTransition": {
+            
+            },
+            "targetPageId": "END_SESSION"
+          },
+          "name": "eb7f152b-8188-4e67-81ea-60426f435dd9",
+          "conditionString": "$session.params.status = \"FINAL\""
+        } ],
+        "etag": "66c65fa1"
+      }
+    }, {
+      "key": "67efae04-3383-4411-a6ad-75ef3ecd182a",
+      "value": {
+        "displayName": "expedite-shipping",
+        "onLoad": {
+          "staticUserResponse": {
+            "candidates": [ {
+              "selector": {
+                "platform": [ "PLATFORM_UNSPECIFIED" ],
+                "lang": "en"
+              },
+              "responses": [ {
+                "text": {
+                  "variants": [ {
+                    "text": "Would you like to expedite your shipping?"
+                  } ]
+                }
+              } ]
+            } ]
+          },
+          "nextActionOverride": {
+          
+          }
+        },
+        "slots": [ {
+          "displayName": "y-o-n",
+          "mode": "REQUIRED",
+          "type": {
+            "className": "@yes-or-no",
+            "classType": "ENUMERATION",
+            "enumerationId": "c879e12b-f71d-4fa8-9873-86de65781d30"
+          },
+          "fillBehavior": {
+            "initialPrompt": {
+            
+            }
+          }
+        } ],
+        "transitionEvents": [ {
+          "condition": {
+            "restriction": {
+              "comparator": "EQUALS",
+              "lhs": {
+                "member": {
+                  "expressions": [ {
+                    "value": "$session"
+                  }, {
+                    "value": "params"
+                  }, {
+                    "value": "y-o-n"
+                  } ]
+                }
+              },
+              "rhs": {
+                "value": "yes"
+              }
+            }
+          },
+          "transitionEventHandler": {
+            "beforeTransition": {
+              "staticUserResponse": {
+                "candidates": [ {
+                  "selector": {
+                    "platform": [ "PLATFORM_UNSPECIFIED" ],
+                    "lang": "en"
+                  },
+                  "responses": [ {
+                    "text": {
+                      "variants": [ {
+                        "text": "Let's move your shipping time up a little bit. Let me connect you to Kaelyn, to make this happen."
+                      } ]
+                    }
+                  } ]
+                }, {
+                  "selector": {
+                    "platform": [ "PLATFORM_UNSPECIFIED" ],
+                    "lang": "en"
+                  },
+                  "responses": [ {
+                    "humanAgentHandoff": {
+                      "metadata": {
+                        "expedite": true
+                      }
+                    }
+                  } ]
+                } ]
+              },
+              "nextActionOverride": {
+              
+              }
+            }
+          },
+          "name": "94c10390-cd46-46b1-a9bd-817a354f5336",
+          "conditionString": "$session.params.y-o-n = yes"
+        }, {
+          "condition": {
+            "restriction": {
+              "comparator": "EQUALS",
+              "lhs": {
+                "member": {
+                  "expressions": [ {
+                    "value": "$session"
+                  }, {
+                    "value": "params"
+                  }, {
+                    "value": "y-o-n"
+                  } ]
+                }
+              },
+              "rhs": {
+                "value": "no"
+              }
+            }
+          },
+          "transitionEventHandler": {
+            "beforeTransition": {
+              "staticUserResponse": {
+                "candidates": [ {
+                  "selector": {
+                    "platform": [ "PLATFORM_UNSPECIFIED" ],
+                    "lang": "en"
+                  },
+                  "responses": [ {
+                    "text": {
+                      "variants": [ {
+                        "text": "No problem! Thanks for calling, have a great day."
+                      } ]
+                    }
+                  } ]
+                } ]
+              },
+              "nextActionOverride": {
+              
+              }
+            }
+          },
+          "name": "38aea57f-cd54-43fa-bee7-23bdae5eaf8e",
+          "conditionString": "$session.params.y-o-n = no"
+        } ],
+        "etag": "66c651f4"
+      }
+    }, {
+      "key": "8282823e-9d09-45fb-a300-8ddfdd8f00d5",
+      "value": {
+        "displayName": "new-order",
+        "onLoad": {
+          "staticUserResponse": {
+            "candidates": [ {
+              "selector": {
+                "platform": [ "PLATFORM_UNSPECIFIED" ],
+                "lang": "en"
+              },
+              "responses": [ {
+                "text": {
+                  "variants": [ {
+                    "text": "Awesome, let's get you a new plant!"
+                  } ]
+                }
+              } ]
+            } ]
+          },
+          "nextActionOverride": {
+          
+          }
+        },
+        "slots": [ {
+          "displayName": "item",
+          "mode": "REQUIRED",
+          "type": {
+            "className": "@item",
+            "classType": "ENUMERATION",
+            "enumerationId": "15d7db9c-af1d-4525-9947-c36f73d99038"
+          },
+          "fillBehavior": {
+            "initialPrompt": {
+              "staticUserResponse": {
+                "candidates": [ {
+                  "selector": {
+                    "platform": [ "PLATFORM_UNSPECIFIED" ],
+                    "lang": "en"
+                  },
+                  "responses": [ {
+                    "text": {
+                      "variants": [ {
+                        "text": "What plant would you like to order?"
+                      } ]
+                    }
+                  } ]
+                } ]
+              },
+              "nextActionOverride": {
+              
+              }
+            }
+          }
+        } ],
+        "transitionEvents": [ {
+          "condition": {
+            "restriction": {
+              "comparator": "EQUALS",
+              "lhs": {
+                "member": {
+                  "expressions": [ {
+                    "value": "$page"
+                  }, {
+                    "value": "params"
+                  }, {
+                    "value": "status"
+                  } ]
+                }
+              },
+              "rhs": {
+                "phrase": {
+                  "values": [ "FINAL" ]
+                }
+              }
+            }
+          },
+          "transitionEventHandler": {
+            "beforeTransition": {
+              "function": {
+                "name": "new",
+                "webhookFulfillmentId": "aae4d35d-6198-4170-b9d7-42487c8a6260"
+              },
+              "nextActionOverride": {
+              
+              }
+            },
+            "targetPageId": "1ddec8ae-5b3b-45c5-9a06-75abd078e729"
+          },
+          "name": "457527b3-4445-4f6b-92c2-03aaa0ee5669",
+          "conditionString": "$page.params.status = \"FINAL\""
+        } ],
+        "etag": "66c65f3a"
+      }
+    }, {
+      "key": "9a08476a-976b-4976-8f44-b2fbc86eb521",
+      "value": {
+        "displayName": "track",
+        "onLoad": {
+          "staticUserResponse": {
+            "candidates": [ {
+              "selector": {
+                "platform": [ "PLATFORM_UNSPECIFIED" ],
+                "lang": "en"
+              },
+              "responses": [ {
+                "text": {
+                  "variants": [ {
+                    "text": "Let's track and find your order."
+                  } ]
+                }
+              } ]
+            } ]
+          },
+          "nextActionOverride": {
+          
+          }
+        },
+        "slots": [ {
+          "displayName": "order-number",
+          "mode": "REQUIRED",
+          "type": {
+            "className": "@sys.number-sequence",
+            "classType": "BUILT_IN_CLASS"
+          },
+          "fillBehavior": {
+            "initialPrompt": {
+              "staticUserResponse": {
+                "candidates": [ {
+                  "selector": {
+                    "platform": [ "PLATFORM_UNSPECIFIED" ],
+                    "lang": "en"
+                  },
+                  "responses": [ {
+                    "text": {
+                      "variants": [ {
+                        "text": "What is your order number sequence?"
+                      } ]
+                    }
+                  } ]
+                } ]
+              },
+              "nextActionOverride": {
+              
+              }
+            }
+          }
+        } ],
+        "transitionEvents": [ {
+          "condition": {
+            "restriction": {
+              "comparator": "EQUALS",
+              "lhs": {
+                "member": {
+                  "expressions": [ {
+                    "value": "$page"
+                  }, {
+                    "value": "params"
+                  }, {
+                    "value": "status"
+                  } ]
+                }
+              },
+              "rhs": {
+                "phrase": {
+                  "values": [ "FINAL" ]
+                }
+              }
+            }
+          },
+          "transitionEventHandler": {
+            "beforeTransition": {
+              "function": {
+                "name": "order",
+                "webhookFulfillmentId": "6d69e07b-2090-4f80-b26f-923e804868fe"
+              },
+              "nextActionOverride": {
+              
+              }
+            },
+            "targetPageId": "67efae04-3383-4411-a6ad-75ef3ecd182a"
+          },
+          "name": "17f98696-e8f8-4b9e-89d3-f8e57cd07552",
+          "conditionString": "$page.params.status = \"FINAL\""
+        } ],
+        "etag": "66c650ee"
+      }
+    } ],
+    "fulfillments": [ {
+      "key": "6d69e07b-2090-4f80-b26f-923e804868fe",
+      "value": {
+        "id": "6d69e07b-2090-4f80-b26f-923e804868fe",
+        "name": "find-order",
+        "webhook": {
+          "url": "https://ivr-buildathon-9330.twil.io/check-order",
+          "webhookTimeout": 5,
+          "webhookType": "STANDARD",
+          "encryptedUsername": "AU91xLWWiBJTfHgYRyi5A99ClZ1nd+r+WtlNMz6MIiVS",
+          "encryptedPassword": "AU91xLVq3wBqka5x47ve1AZl0uBS+LLId22+31UiYUM/"
+        },
+        "etag": "66c64e8a"
+      }
+    }, {
+      "key": "aae4d35d-6198-4170-b9d7-42487c8a6260",
+      "value": {
+        "id": "aae4d35d-6198-4170-b9d7-42487c8a6260",
+        "name": "make-order",
+        "webhook": {
+          "url": "https://ivr-buildathon-9330.twil.io/new-order",
+          "webhookTimeout": 5,
+          "webhookType": "STANDARD",
+          "encryptedUsername": "AU91xLUlQI44ZdexiBkbgH9PZvv+ue7h1pUELbDLGRT+",
+          "encryptedPassword": "AU91xLUQ7zbuVfCHbxkeR5WmJeYfIXumcW+2uLA/igg8"
+        },
+        "etag": "66c65350"
+      }
+    } ],
+    "webhooks": [ {
+      "key": "6d69e07b-2090-4f80-b26f-923e804868fe",
+      "value": {
+        "name": "projects/-/locations/-/agents/-/webhooks/6d69e07b-2090-4f80-b26f-923e804868fe",
+        "displayName": "find-order",
+        "genericWebService": {
+          "uri": "https://ivr-buildathon-9330.twil.io/check-order",
+          "webhookType": "STANDARD"
+        },
+        "timeout": {
+          "seconds": 5
+        },
+        "etag": "66c64e8a"
+      }
+    }, {
+      "key": "aae4d35d-6198-4170-b9d7-42487c8a6260",
+      "value": {
+        "name": "projects/-/locations/-/agents/-/webhooks/aae4d35d-6198-4170-b9d7-42487c8a6260",
+        "displayName": "make-order",
+        "genericWebService": {
+          "uri": "https://ivr-buildathon-9330.twil.io/new-order",
+          "webhookType": "STANDARD"
+        },
+        "timeout": {
+          "seconds": 5
+        },
+        "etag": "66c65350"
+      }
+    } ]
+  }
+}
